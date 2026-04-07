@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const joi = require('joi')
-const { expressjwt } = require("express-jwt") // 解析 token 的中间件
+const { expressjwt } = require('express-jwt') // 解析 token 的中间件
 const config = require('./config')
 const userRouter = require('./router/user')
 const friendRouter = require('./router/friend')
@@ -22,7 +22,7 @@ app.use((req, res, next) => {
       // 状态
       code,
       // 状态描述，判断 err 是 错误对象 还是 字符串
-      message: err instanceof Error ? err.message : err,
+      message: err instanceof Error ? err.message : err
     })
   }
   next()

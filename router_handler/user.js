@@ -45,8 +45,8 @@ exports.login = (req, res) => {
     if (err) return res.cc(err)
     if (!result.length) return res.cc('登录失败：用户不存在！')
     // 拿用户输入的密码，和数据库中存储的密码进行对比
-    if(!bcrypt.compareSync(userinfo.password, result[0].password)) return res.cc('密码错误')
-    
+    if (!bcrypt.compareSync(userinfo.password, result[0].password)) return res.cc('密码错误')
+
     // 剔除用户密码和头像
     delete result[0].password
     const userData = JSON.parse(JSON.stringify(result[0]))
@@ -56,9 +56,9 @@ exports.login = (req, res) => {
     res.send({
       code: 0,
       message: '登录成功！',
-      data: {...userData, token: `Bearer ${token}`},
+      data: { ...userData, token: `Bearer ${token}` },
       // 为了方便客户端使用 Token，在服务器端直接拼接上 Bearer 的前缀
-      token: `Bearer ${token}`,
+      token: `Bearer ${token}`
     })
   })
 }
@@ -84,7 +84,7 @@ exports.getUserinfo = (req, res) => {
 exports.updateUserinfo = (req, res) => {
   const sql = 'UPDATE users_table SET ? WHERE id=?'
   // 注意此处使用的 id 是 token 中的id，为了安全不应该前端传用户id
-  console.log(req.body, req.auth);
+  console.log(req.body, req.auth)
   db.query(sql, [req.body, req.auth.id], (err, result) => {
     if (err) return res.cc(err)
     if (result.affectedRows !== 1) return res.cc('修改信息失败！')
@@ -104,7 +104,7 @@ exports.updatePassword = (req, res) => {
     // 即可使用 bcrypt.compareSync(提交的密码，数据库中的密码) 方法验证密码是否正确
     // compareSync() 函数的返回值为布尔值，true 表示密码正确，false 表示密码错误
     if (!bcrypt.compareSync(req.body.oldPassword, result1[0].password)) return res.cc('原密码错误！')
-    
+
     const sql2 = 'UPDATE users_table SET password=? WHERE id=?'
     // 对新密码进行 bcrypt 加密之后，更新到数据库中
     const newPwd = bcrypt.hashSync(req.body.newPassword, 10)
